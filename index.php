@@ -11,6 +11,21 @@ $app = new Slim();
 $app->response()->header('Content-Type', 'application/json');
 $app->response()->header('Access-Control-Allow-Origin', '*');
 
+
+/**
+ *generate_key
+ *
+ *generates a random key
+ *
+ *@return (string) random string of 64 characters 
+ *
+ */
+function generate_key() {
+	$characters = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z')); 
+	shuffle($characters);
+	return hash_hmac('sha256', substr(implode('', $characters), 0, 32), time());
+}
+
 // @todo: add count collection command mongo/commands.php
 
 $app->get('/', function () use ($app) {
