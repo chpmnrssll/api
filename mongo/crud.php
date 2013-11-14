@@ -61,10 +61,10 @@ function mongoUpdate($server, $db, $collection, $id, $document) {
 			'_id' => new MongoId($id)
 		);
 		
-		// make sure that an _id never gets through
+		// make sure that an plain _id never gets through
 		unset($document['_id']);
 		
-		$collection->update($criteria,array('$set' => $document));
+		$collection->update($criteria, array('$set' => $document));
 		$conn->close();
 		
 		$document['_id'] = $id;

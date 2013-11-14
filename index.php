@@ -4,21 +4,17 @@ require 'mongo/crud.php';
 require 'mongo/list.php';
 require 'mongo/command.php';
 
-define('MONGO_HOST', $_ENV['OPENSHIFT_MONGODB_DB_URL']);	//'localhost'
-define('DB', 'chpmn');	//api
+define('MONGO_HOST', $_ENV['OPENSHIFT_MONGODB_DB_URL']);
+define('DB', 'chpmn');
 
 $app = new Slim();
 $app->response()->header('Content-Type', 'application/json');
 $app->response()->header('Access-Control-Allow-Origin', '*');
 
-
 /**
  *generate_key
- *
  *generates a random key
- *
  *@return (string) random string of 64 characters 
- *
  */
 function generate_key() {
 	$characters = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z')); 
@@ -58,7 +54,7 @@ $app->get('/:collection/', function ($collection) use ($app) {
 
 // Create
 $app->post('/:collection/', function ($collection) use ($app) {
-	$document = json_decode(Slim::getInstance()->request()->getBody(), true);
+	$document = json_decode($app->request()->getBody(), true);
 	$data = mongoCreate(MONGO_HOST, DB, $collection, $document);
 	$app->response()->body(json_encode($data));
 	$app->stop();
@@ -73,7 +69,7 @@ $app->get('/:collection/:id', function ($collection, $id) use ($app) {
 
 // Update
 $app->put('/:collection/:id', function ($collection, $id) use ($app) {
-	$document = json_decode(Slim::getInstance()->request()->getBody(), true);
+	$document = json_decode($app->request()->getBody(), true);
 	$data = mongoUpdate(MONGO_HOST, DB, $collection, $id, $document);
 	$app->response()->body(json_encode($data));
 	$app->stop();
